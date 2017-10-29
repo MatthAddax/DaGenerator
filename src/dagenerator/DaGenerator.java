@@ -5,6 +5,7 @@
  */
 package dagenerator;
 
+import com.sun.deploy.util.StringUtils;
 import dagenerator.exceptions.ConditionCleanCodeException;
 import dagenerator.exceptions.NotUniqueProgramException;
 import java.util.regex.Matcher;
@@ -95,12 +96,8 @@ public class DaGenerator{
                     else{
                         if(matcherIfElse.find()){
                             CodeNode ifElse = new IfElseNode(root);
-                            if(root!= null)
-                                root.addChild(ifElse);
-                            root = ifElse;
-                            /*
-                                    ATTENTION => Que faire du ELSE, nouveau noeud pouvant avoir des enfants ou juste un else
-                            */
+                            if(root!= null && root.getParent() != null && root instanceof IfNode)
+                                root.getParent().addChild(ifElse);
                         }
                         else{
                             if(matcherWhileStart.find()){
@@ -124,7 +121,7 @@ public class DaGenerator{
                                             root = root.getParent();
                                     }
                                     else{
-                                        if(root != null && line!=null){
+                                        if(root != null && line!=null && line.trim().isEmpty()){
                                             CodeNode node = new LineNode(root, line);
                                             root.addChild(node);
                                         }
@@ -136,6 +133,9 @@ public class DaGenerator{
                     }
                 }
             }
+
+            while(root != null && root.getParent() != null)
+                root = root.getParent();
 
             return root;
 	}

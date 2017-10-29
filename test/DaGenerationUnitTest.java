@@ -14,12 +14,9 @@ import java.nio.file.Paths;
 import java.nio.charset.Charset;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import static org.junit.Assert.*;
+
+import org.junit.jupiter.api.Test;
+
 
 /**
  *
@@ -35,12 +32,10 @@ public class DaGenerationUnitTest {
     @Test
     public void GoodDaTesting(){
         try {
-            node = generator.parse(readFile("C:\\Users\\Matthieu\\Dropbox\\DAGEnerator\\daSimulation-25-10.txt", Charset.defaultCharset()));
+            node = generator.parse(readFile("C:\\Users\\matth\\Dropbox\\DAGEnerator\\daSimulation-25-10.txt", Charset.defaultCharset()));
             
             System.out.println("NODE : " + node);
-            /**
-             L'arbre foire, voir comment retourner au parent originel au début et s'assurer d'avoir tous les enfants à chaque fois
-            */
+
         } catch (IOException ex) {
             Logger.getLogger(DaGenerationUnitTest.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NotUniqueProgramException ex) {
