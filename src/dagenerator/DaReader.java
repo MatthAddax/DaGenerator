@@ -9,7 +9,7 @@ import java.util.function.Function;
 public class DaReader {
 
     public static void toTXT(CodeNode da){
-        recursiveRead(da, null);
+        recursiveRead(da, null, 0);
     }
 
     @Contract("_ -> fail")
@@ -17,11 +17,12 @@ public class DaReader {
         throw new UnsupportedOperationException();
     }
 
-    private static void recursiveRead(CodeNode da, Function<CodeNode, Void> func){
-        System.out.println(da.toString() + "\n");
+    private static void recursiveRead(CodeNode da, Function<CodeNode, Void> func, int step){
+        //int step = mStep;
+        System.out.println(step + " " + da.toString() + "\n");
         if(da.getChilds()!= null){
             for(CodeNode child : da.getChilds()){
-                recursiveRead(child, func);
+                recursiveRead(child, func, step + 1);
             }
         }
     }
