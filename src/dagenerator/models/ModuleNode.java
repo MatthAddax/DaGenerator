@@ -5,6 +5,8 @@
  */
 package dagenerator.models;
 
+import java.util.Arrays;
+
 /**
  *
  * @author Matthieu
@@ -23,7 +25,7 @@ public class ModuleNode extends CodeNode{
 
     @Override
     public String toString() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "Module : " + name + " with input params " + String.join(", ", input) + " and output params " + String.join(", ", output);
     }
     
     

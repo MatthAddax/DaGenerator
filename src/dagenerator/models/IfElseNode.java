@@ -17,7 +17,7 @@ public class IfElseNode extends CodeNode{
 
     @Override
     public String toString() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return "if_else_node";
     }
     
 }

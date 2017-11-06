@@ -5,17 +5,24 @@
  */
 
 import dagenerator.DaGenerator;
+import dagenerator.DaReader;
 import dagenerator.exceptions.ConditionCleanCodeException;
 import dagenerator.exceptions.NotUniqueProgramException;
 import dagenerator.models.CodeNode;
+import dagenerator.utils.UnicodeBOMInputStream;
+import org.junit.jupiter.api.Test;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.junit.jupiter.api.Test;
 
 
 /**
@@ -32,9 +39,16 @@ public class DaGenerationUnitTest {
     @Test
     public void GoodDaTesting(){
         try {
-            node = generator.parse(readFile("C:\\Users\\matth\\Dropbox\\DAGEnerator\\daSimulation-25-10.txt", Charset.defaultCharset()));
-            
-            System.out.println("NODE : " + node);
+            FileInputStream fis = new FileInputStream("C:\\Users\\matth\\Dropbox\\DAGEnerator\\daSimulation-25-10.txt");
+            UnicodeBOMInputStream ubis = new UnicodeBOMInputStream(fis);
+            InputStreamReader isr = new InputStreamReader(ubis);
+            BufferedReader br = new BufferedReader(isr);
+
+            ubis.skipBOM();
+
+            node = generator.parse(br);
+
+            DaReader.toTXT(node);
 
         } catch (IOException ex) {
             Logger.getLogger(DaGenerationUnitTest.class.getName()).log(Level.SEVERE, null, ex);
@@ -44,10 +58,5 @@ public class DaGenerationUnitTest {
             Logger.getLogger(DaGenerationUnitTest.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    static String readFile(String path, Charset encoding) throws IOException 
-    {
-      byte[] encoded = Files.readAllBytes(Paths.get(path));
-      return new String(encoded, encoding);
-    }
+
 }

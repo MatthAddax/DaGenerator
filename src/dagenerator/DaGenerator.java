@@ -8,6 +8,9 @@ package dagenerator;
 import com.sun.deploy.util.StringUtils;
 import dagenerator.exceptions.ConditionCleanCodeException;
 import dagenerator.exceptions.NotUniqueProgramException;
+
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,11 +40,11 @@ public class DaGenerator{
 	/*
 		Patterns
 	*/
-	private final Pattern while_start = Pattern.compile("^\\s+do while\\((.*?)\\)");
-	private final Pattern while_end = Pattern.compile("^\\s+end while");
-	private final Pattern program_start = Pattern.compile("^s*\\*(.*?)$");
+	private final Pattern while_start = Pattern.compile("^\\s+do while\\((.*?)\\)\\s*$");
+	private final Pattern while_end = Pattern.compile("^\\s+end while\\s*$");
+	private final Pattern program_start = Pattern.compile("^\\*\\s*(.+?)\\s*$");
 	//private final Pattern program_end;
-	private final Pattern if_start = Pattern.compile("^\\s+if\\((.*?)\\)$");
+	private final Pattern if_start = Pattern.compile("^\\s+if\\((.*?)\\)\\s*$");
 	private final Pattern if_else = Pattern.compile("^\\s+else\\s*$");
 	private final Pattern if_end = Pattern.compile("^\\s+end if\\s*$");
 	private final Pattern module = Pattern.compile("^\\s+mod:(.*?);(.*?);(.*?)\\s*$");
@@ -51,16 +54,17 @@ public class DaGenerator{
 	
 	private CodeNode root;
 	
-	public CodeNode parse(String unparsed_da) throws NotUniqueProgramException, ConditionCleanCodeException{
+	public CodeNode parse(BufferedReader unparsed_da) throws NotUniqueProgramException, ConditionCleanCodeException, IOException {
             /**
                     Work with buffers instead?
                     Will allow work from any kind of stream (string, file, network, etc)
             */
-            String[] lines = unparsed_da.split("\n");
+            //String[] lines = unparsed_da.split("\r\n");
 
             StringBuilder sb = new StringBuilder();
             int currentLineNumber = 0;
-            for(String line : lines){
+            String line;
+            while((line = unparsed_da.readLine()) != null){
                 currentLineNumber++;
                 Matcher matcherWhileStart = while_start.matcher(line);
                 Matcher matcherWhileEnd = while_end.matcher(line);
@@ -70,6 +74,8 @@ public class DaGenerator{
                 Matcher matcherIfEnd = if_end.matcher(line);
                 Matcher matcherModule = module.matcher(line);
 
+                //boolean programStartFound = matcherProgramStart.find();
+                //int groupCount = matcherProgramStart.groupCount();
                 if(matcherProgramStart.find()){
                     /*
                         Ajouter noeud dans l'arbre ATTENTION : program_start = NOEUD_UNIQUE!!
@@ -80,7 +86,8 @@ public class DaGenerator{
 
                     root = new ProgramNode(matcherProgramStart.group(1));
                 }
-                else{
+                else
+                {
                     /*
                         if or loop or module => new code node and change current root
                         end if end loop end of module => go to previous root
@@ -113,7 +120,7 @@ public class DaGenerator{
                                     String stringOutput = matcherModule.group(3);
                                     CodeNode module = new ModuleNode(root, name, stringInput, stringOutput);
                                     if(root!= null)
-                                            root.addChild(module);
+                                        root.addChild(module);
                                 }
                                 else{
                                     if(matcherIfEnd.find() || matcherWhileEnd.find()){
@@ -121,9 +128,11 @@ public class DaGenerator{
                                             root = root.getParent();
                                     }
                                     else{
-                                        if(root != null && line!=null && line.trim().isEmpty()){
-                                            CodeNode node = new LineNode(root, line);
-                                            root.addChild(node);
+                                        if(root != null && line!=null){
+                                            if(!line.matches("^\\s+$")){
+                                                CodeNode node = new LineNode(root, line.trim());
+                                                root.addChild(node);
+                                            }
                                         }
                                             
                                     }
