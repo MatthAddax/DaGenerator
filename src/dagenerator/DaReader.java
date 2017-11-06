@@ -1,28 +1,64 @@
 package dagenerator;
 
-import dagenerator.models.CodeNode;
+import dagenerator.models.*;
+import dagenerator.utils.TextConstants;
 import org.jetbrains.annotations.Contract;
 
-import java.util.concurrent.Callable;
-import java.util.function.Function;
+import java.text.Format;
+import java.util.function.BiFunction;
 
 public class DaReader {
+    private StringBuilder txtBuilder;
+    private String line;
+    public void toTXT(CodeNode da){
+        txtBuilder = new StringBuilder();
+        line = "";
+        BiFunction<CodeNode, Integer, Void> toTextFunction = (node, step) -> {
+            if(node instanceof ProgramNode){
+                txtBuilder.append(TextConstants.program_start).append(node).append("\n");
+                line += TextConstants.vertical_bar;
+            }
+            else{
+                if(node instanceof WhileNode){
+                    txtBuilder.append(line).append(String.format(TextConstants.while_start_text, node));
+                    line += TextConstants.while_current + "\t";
+                }
+                else{
+                    if(node instanceof IfNode){
 
-    public static void toTXT(CodeNode da){
-        recursiveRead(da, null, 0);
+                    }
+                    else{
+                        if(node instanceof ModuleNode){
+
+                        }
+                        else{
+                            if(node instanceof LineNode){
+
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
+        };
+
+        recursiveRead(da, 0,null);
     }
 
     @Contract("_ -> fail")
-    public static void toPDF(CodeNode da){
+    public void toPDF(CodeNode da){
         throw new UnsupportedOperationException();
     }
 
-    private static void recursiveRead(CodeNode da, Function<CodeNode, Void> func, int step){
+    private void recursiveRead(CodeNode da, int step, BiFunction<CodeNode, Integer, Void> func){
         //int step = mStep;
-        System.out.println(step + " " + da.toString() + "\n");
+        if(func != null)
+            func.apply(da, step);
+        else
+            System.out.println(step + " : " + da);
         if(da.getChilds()!= null){
             for(CodeNode child : da.getChilds()){
-                recursiveRead(child, func, step + 1);
+                recursiveRead(child, step + 1, func);
             }
         }
     }

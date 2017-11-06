@@ -48,7 +48,7 @@ public class DaGenerationUnitTest {
 
             node = generator.parse(br);
 
-            DaReader.toTXT(node);
+            new DaReader().toTXT(node);
 
         } catch (IOException ex) {
             Logger.getLogger(DaGenerationUnitTest.class.getName()).log(Level.SEVERE, null, ex);
