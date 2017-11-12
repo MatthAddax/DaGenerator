@@ -10,6 +10,7 @@ import dagenerator.exceptions.ConditionCleanCodeException;
 import dagenerator.exceptions.NotUniqueProgramException;
 import dagenerator.models.CodeNode;
 import dagenerator.utils.UnicodeBOMInputStream;
+import j2html.TagCreator;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
@@ -25,6 +26,7 @@ import java.util.logging.Logger;
 
 
 
+
 /**
  *
  * @author Matthieu
@@ -32,6 +34,7 @@ import java.util.logging.Logger;
 public class DaGenerationUnitTest {
     CodeNode node;
     DaGenerator generator;
+
     public DaGenerationUnitTest() {
         generator = new DaGenerator();
     }

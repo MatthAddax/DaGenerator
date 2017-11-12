@@ -2,13 +2,15 @@ package dagenerator;
 
 import dagenerator.models.*;
 import dagenerator.utils.TextConstants;
-import org.jetbrains.annotations.Contract;
+import j2html.TagCreator;
 
-import java.text.Format;
 import java.util.function.BiFunction;
+
+import static j2html.TagCreator.*;
 
 public class DaReader {
     private StringBuilder txtBuilder;
+    private TagCreator tagCreator;
     private String line;
     public void toTXT(CodeNode da){
         txtBuilder = new StringBuilder();
@@ -65,6 +67,10 @@ public class DaReader {
         System.out.println(txtBuilder.toString());
     }
 
+    public void toHTML(CodeNode da){
+        
+    }
+
     private void createTxtLineFromParents(CodeNode node) {
         line = "";
         while(node.getParent()!=null){
@@ -80,7 +86,6 @@ public class DaReader {
         }
     }
 
-    @Contract("_ -> fail")
     public void toPDF(CodeNode da){
         throw new UnsupportedOperationException();
     }
