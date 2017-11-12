@@ -39,6 +39,7 @@ public class DaReader {
                             }
                             else{
                                 if(node instanceof IfElseNode){
+                                    line = line.substring(0, line.length() - 2);
                                     txtBuilder.append(line).append(TextConstants.if_else_text).append("\n");
                                 }
                                 else{

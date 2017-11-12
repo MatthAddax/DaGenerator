@@ -96,9 +96,9 @@ public class DaGenerator{
                     }
                     else{
                         if(matcherIfElse.find()){
-                            if(root!= null && root.getParent() != null && root instanceof IfNode){
-                                CodeNode ifElse = new IfElseNode(root.getParent());
-                                root.getParent().addChild(ifElse);
+                            if(root instanceof IfNode){
+                                CodeNode ifElse = new IfElseNode(root);
+                                root.addChild(ifElse);
                             }
                         }
                         else{
