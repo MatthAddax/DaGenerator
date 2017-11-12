@@ -12,28 +12,45 @@ public class DaReader {
     private String line;
     public void toTXT(CodeNode da){
         txtBuilder = new StringBuilder();
-        line = "";
+
         BiFunction<CodeNode, Integer, Void> toTextFunction = (node, step) -> {
+            createTxtLineFromParents(node);
             if(node instanceof ProgramNode){
                 txtBuilder.append(TextConstants.program_start).append(node).append("\n");
                 line += TextConstants.vertical_bar;
             }
             else{
                 if(node instanceof WhileNode){
-                    txtBuilder.append(line).append(String.format(TextConstants.while_start_text, node));
-                    line += TextConstants.while_current + "\t";
+                    txtBuilder.append(line).append(String.format(TextConstants.while_start_text, node)).append("\n");
                 }
                 else{
                     if(node instanceof IfNode){
-
+                        txtBuilder.append(line).append(String.format(TextConstants.if_start_text, node)).append("\n");
                     }
                     else{
                         if(node instanceof ModuleNode){
-
+                            txtBuilder.append(line).append(((ModuleNode)node).getUpLayer()).append("\n");
+                            txtBuilder.append(line).append(((ModuleNode)node).getMiddleLayer()).append("\n");
+                            txtBuilder.append(line).append(((ModuleNode)node).getBottomLayer()).append("\n");
                         }
                         else{
                             if(node instanceof LineNode){
-
+                                txtBuilder.append(line).append(node).append("\n");
+                            }
+                            else{
+                                if(node instanceof IfElseNode){
+                                    txtBuilder.append(line).append(TextConstants.if_else_text).append("\n");
+                                }
+                                else{
+                                    if(node instanceof IfEnd){
+                                        txtBuilder.append(line).append(TextConstants.if_end_text).append("\n");
+                                    }
+                                    else{
+                                        if(node instanceof WhileEnd){
+                                            txtBuilder.append(line).append(TextConstants.while_end).append("\n");
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -42,7 +59,24 @@ public class DaReader {
             return null;
         };
 
-        recursiveRead(da, 0,null);
+        recursiveRead(da, 0,toTextFunction);
+
+        System.out.println(txtBuilder.toString());
+    }
+
+    private void createTxtLineFromParents(CodeNode node) {
+        line = "";
+        while(node.getParent()!=null){
+            node = node.getParent();
+            if(node instanceof WhileNode){
+                line = TextConstants.while_current + "\t" + line;
+            }
+            else{
+                if(node instanceof IfNode || node instanceof ProgramNode){
+                    line = TextConstants.vertical_bar + "\t" + line;
+                }
+            }
+        }
     }
 
     @Contract("_ -> fail")

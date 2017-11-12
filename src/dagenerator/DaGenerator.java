@@ -14,13 +14,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import dagenerator.models.CodeNode;
-import dagenerator.models.IfNode;
-import dagenerator.models.IfElseNode;
-import dagenerator.models.LineNode;
-import dagenerator.models.ModuleNode;
-import dagenerator.models.ProgramNode;
-import dagenerator.models.WhileNode;
+import dagenerator.models.*;
 
 public class DaGenerator{
         /**
@@ -102,9 +96,10 @@ public class DaGenerator{
                     }
                     else{
                         if(matcherIfElse.find()){
-                            CodeNode ifElse = new IfElseNode(root);
-                            if(root!= null && root.getParent() != null && root instanceof IfNode)
+                            if(root!= null && root.getParent() != null && root instanceof IfNode){
+                                CodeNode ifElse = new IfElseNode(root.getParent());
                                 root.getParent().addChild(ifElse);
+                            }
                         }
                         else{
                             if(matcherWhileStart.find()){
@@ -123,18 +118,31 @@ public class DaGenerator{
                                         root.addChild(module);
                                 }
                                 else{
-                                    if(matcherIfEnd.find() || matcherWhileEnd.find()){
-                                        if(root!= null)
-                                            root = root.getParent();
+                                    if(matcherIfEnd.find()){
+                                        if(root!= null && root.getParent() != null && root instanceof IfNode){
+                                            CodeNode ifEnd = new IfEnd(root.getParent());
+                                            root.getParent().addChild(ifEnd);
+                                        }
+
+                                        root = root.getParent();
                                     }
                                     else{
-                                        if(root != null && line!=null){
-                                            if(!line.matches("^\\s+$")){
-                                                CodeNode node = new LineNode(root, line.trim());
-                                                root.addChild(node);
+                                        if(matcherWhileEnd.find()){
+                                            if(root!= null && root.getParent() != null && root instanceof WhileNode){
+                                                CodeNode whileEnd = new WhileEnd(root.getParent());
+                                                root.getParent().addChild(whileEnd);
+                                            }
+
+                                            root = root.getParent();
+                                        }
+                                        else{
+                                            if(root != null && line!=null){
+                                                if(!line.matches("^\\s+$")){
+                                                    CodeNode node = new LineNode(root, line.trim());
+                                                    root.addChild(node);
+                                                }
                                             }
                                         }
-                                            
                                     }
                                 }
                             }

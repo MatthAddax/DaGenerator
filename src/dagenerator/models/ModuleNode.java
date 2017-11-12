@@ -5,6 +5,8 @@
  */
 package dagenerator.models;
 
+import dagenerator.utils.TextConstants;
+
 import java.util.Arrays;
 
 /**
@@ -18,7 +20,7 @@ public class ModuleNode extends CodeNode{
 
     public ModuleNode(CodeNode parent, String name, String inputString, String outputString) {
         super(parent);
-        
+        this.name = name;
         input = inputString.split(",");
         output = outputString.split(",");
     }
@@ -27,6 +29,56 @@ public class ModuleNode extends CodeNode{
     public String toString() {
         return "Module : " + name + " with input params " + String.join(", ", input) + " and output params " + String.join(", ", output);
     }
-    
-    
+
+
+    public String getUpLayer() {
+        String upLayer = TextConstants.upper_left_module_angle;
+
+        if(name == null)
+            name = "Module Name";
+
+        for(int i = 0; i<name.length()+4;i++){
+            upLayer += TextConstants.repetitive_module_bar;
+        }
+
+        upLayer += TextConstants.upper_right_module_angle;
+
+        if(input != null && input.length != 0){
+            upLayer +=  TextConstants.io_module_arrow;
+        }
+        for(String in : input){
+            upLayer += in + ", ";
+        }
+
+        upLayer = upLayer.substring(0, upLayer.length() - 2);
+
+        return upLayer;
+    }
+
+    public String getMiddleLayer() {
+        String middleLayer = TextConstants.vertical_bar + " " + name + " " + TextConstants.vertical_bar;
+
+        return middleLayer;
+    }
+
+    public String getBottomLayer() {
+        String bottomLayer = TextConstants.lower_left_module_angle;
+
+        for(int i = 0; i<name.length()+4;i++){
+            bottomLayer += TextConstants.repetitive_module_bar;
+        }
+
+        bottomLayer += TextConstants.lower_right_module_angle;
+
+        if(output != null && output.length != 0){
+            bottomLayer +=  TextConstants.io_module_arrow;
+        }
+        for(String out : output){
+            bottomLayer += out + ", ";
+        }
+
+        bottomLayer = bottomLayer.substring(0, bottomLayer.length() - 2);
+
+        return bottomLayer;
+    }
 }
