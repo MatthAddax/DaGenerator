@@ -52,6 +52,11 @@ public class DaReader {
                                         if(node instanceof WhileEnd){
                                             txtBuilder.append(line).append(TextConstants.while_end).append("\n");
                                         }
+                                        else{
+                                            if(node instanceof ProgramEndNode){
+                                                txtBuilder.append(line).append(TextConstants.program_end).append("\n");
+                                            }
+                                        }
                                     }
                                 }
                             }

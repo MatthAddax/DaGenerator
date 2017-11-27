@@ -7,6 +7,6 @@ public class ProgramEndNode extends CodeNode {
 
     @Override
     public String toString() {
-        return "while_end";
+        return "program_end";
     }
 }

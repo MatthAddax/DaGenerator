@@ -56,7 +56,7 @@ public class ModuleNode extends CodeNode{
     }
 
     public String getMiddleLayer() {
-        String middleLayer = TextConstants.vertical_bar + " " + name + " " + TextConstants.vertical_bar;
+        String middleLayer = TextConstants.vertical_bar + " " + name + "   " + TextConstants.vertical_bar;
 
         return middleLayer;
     }
