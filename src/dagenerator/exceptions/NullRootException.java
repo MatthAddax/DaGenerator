@@ -9,9 +9,9 @@ package dagenerator.exceptions;
  *
  * @author Matthieu
  */
-public class NotUniqueProgramException extends Throwable{
+public class NullRootException extends Throwable{
     private int lineNumber;
-    public NotUniqueProgramException(int currentLineNumber) {
+    public NullRootException(int currentLineNumber) {
         lineNumber = currentLineNumber;
     }
     

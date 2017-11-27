@@ -8,8 +8,8 @@ package dagenerator.models;
 public class ProgramNode extends CodeNode{
     private String name;
 
-    public ProgramNode(String name){
-            super(null);
+    public ProgramNode(CodeNode parent, String name){
+            super(parent);
             this.name = name;
     }
 

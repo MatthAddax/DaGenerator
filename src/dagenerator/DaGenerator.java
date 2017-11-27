@@ -5,9 +5,8 @@
  */
 package dagenerator;
 
-import com.sun.deploy.util.StringUtils;
 import dagenerator.exceptions.ConditionCleanCodeException;
-import dagenerator.exceptions.NotUniqueProgramException;
+import dagenerator.exceptions.NullRootException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -48,7 +47,7 @@ public class DaGenerator{
 	
 	private CodeNode root;
 	
-	public CodeNode parse(BufferedReader unparsed_da) throws NotUniqueProgramException, ConditionCleanCodeException, IOException {
+	public CodeNode parse(BufferedReader unparsed_da) throws NullRootException, ConditionCleanCodeException, IOException {
             /**
                     Work with buffers instead?
                     Will allow work from any kind of stream (string, file, network, etc)
@@ -58,6 +57,9 @@ public class DaGenerator{
             StringBuilder sb = new StringBuilder();
             int currentLineNumber = 0;
             String line;
+
+            root = new ActionDiagramNode();
+
             while((line = unparsed_da.readLine()) != null){
                 currentLineNumber++;
                 Matcher matcherWhileStart = while_start.matcher(line);
@@ -75,10 +77,13 @@ public class DaGenerator{
                         Ajouter noeud dans l'arbre ATTENTION : program_start = NOEUD_UNIQUE!!
                         Sinon imbriquer matcher suivant
                     */
-                    if(root != null)
-                        throw new NotUniqueProgramException(currentLineNumber);
+                    if(root == null)
+                        throw new NullRootException(currentLineNumber);
 
-                    root = new ProgramNode(matcherProgramStart.group(1));
+                    CodeNode programNode = new ProgramNode(root, matcherProgramStart.group(1));
+                    root.addChild(programNode);
+                    root = programNode;
+
                 }
                 else
                 {
