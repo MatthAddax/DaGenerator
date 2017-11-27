@@ -36,7 +36,7 @@ public class DaGenerator{
 	private final Pattern while_start = Pattern.compile("^\\s+do while\\((.*?)\\)\\s*$");
 	private final Pattern while_end = Pattern.compile("^\\s+end while\\s*$");
 	private final Pattern program_start = Pattern.compile("^\\*\\s*(.+?)\\s*$");
-	//private final Pattern program_end;
+	private final Pattern program_end = Pattern.compile("^end program");
 	private final Pattern if_start = Pattern.compile("^\\s+if\\((.*?)\\)\\s*$");
 	private final Pattern if_else = Pattern.compile("^\\s+else\\s*$");
 	private final Pattern if_end = Pattern.compile("^\\s+end if\\s*$");
@@ -65,6 +65,7 @@ public class DaGenerator{
                 Matcher matcherWhileStart = while_start.matcher(line);
                 Matcher matcherWhileEnd = while_end.matcher(line);
                 Matcher matcherProgramStart = program_start.matcher(line);
+                Matcher matcherProgramEnd = program_end.matcher(line);
                 Matcher matcherIfStart = if_start.matcher(line);
                 Matcher matcherIfElse = if_else.matcher(line);
                 Matcher matcherIfEnd = if_end.matcher(line);
@@ -141,10 +142,20 @@ public class DaGenerator{
                                             root = root.getParent();
                                         }
                                         else{
-                                            if(root != null && line!=null){
-                                                if(!line.matches("^\\s+$")){
-                                                    CodeNode node = new LineNode(root, line.trim());
-                                                    root.addChild(node);
+                                            if(matcherProgramEnd.find()){
+                                                if(root!= null && root.getParent() != null && root instanceof ProgramNode){
+                                                    CodeNode programEnd = new ProgramEndNode(root.getParent());
+                                                    root.getParent().addChild(programEnd);
+                                                }
+
+                                                root = root.getParent();
+                                            }
+                                            else{
+                                                if(root != null && line!=null){
+                                                    if(!line.matches("^\\s+$")){
+                                                        CodeNode node = new LineNode(root, line.trim());
+                                                        root.addChild(node);
+                                                    }
                                                 }
                                             }
                                         }
