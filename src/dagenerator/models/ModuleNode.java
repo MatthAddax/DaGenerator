@@ -5,6 +5,7 @@
  */
 package dagenerator.models;
 
+import dagenerator.utils.HtmlConstants;
 import dagenerator.utils.TextConstants;
 
 import java.util.Arrays;
@@ -56,7 +57,7 @@ public class ModuleNode extends CodeNode{
     }
 
     public String getMiddleLayer() {
-        String middleLayer = TextConstants.vertical_bar + " " + name + "   " + TextConstants.vertical_bar;
+        String middleLayer = TextConstants.vertical_bar + "  " + name + "  " + TextConstants.vertical_bar;
 
         return middleLayer;
     }
@@ -78,6 +79,47 @@ public class ModuleNode extends CodeNode{
         }
 
         bottomLayer = bottomLayer.substring(0, bottomLayer.length() - 2);
+
+        return bottomLayer;
+    }
+
+    public String getHtmlUpLayer() {
+        String upLayer = HtmlConstants.upper_left_module_angle;
+
+        if(name == null)
+            name = "Module Name";
+
+        for(int i = 0; i<name.length()+4;i++){
+            upLayer += HtmlConstants.repetitive_module_bar;
+        }
+
+        upLayer += HtmlConstants.upper_right_module_angle;
+
+        if(input != null && input.length != 0){
+            upLayer +=  String.format(HtmlConstants.io_module_arrow, Arrays.toString(input));
+        }
+
+        return upLayer;
+    }
+
+    public String getHtmlMiddleLayer() {
+        String middleLayer = HtmlConstants.left_vertical_module_bar+ "  " + name + "  " + HtmlConstants.right_vertical_module_bar;
+
+        return middleLayer;
+    }
+
+    public String getHtmlBottomLayer() {
+        String bottomLayer = HtmlConstants.lower_left_module_angle;
+
+        for(int i = 0; i<name.length()+4;i++){
+            bottomLayer += HtmlConstants.repetitive_module_bar;
+        }
+
+        bottomLayer += HtmlConstants.lower_right_module_angle;
+
+        if(output != null && output.length != 0){
+            bottomLayer +=  String.format(HtmlConstants.io_module_arrow, Arrays.toString(output));
+        }
 
         return bottomLayer;
     }

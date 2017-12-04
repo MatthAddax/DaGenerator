@@ -37,7 +37,7 @@ public class DaGenerationUnitTest {
     @Test
     public void GoodDaTesting(){
         try {
-            FileInputStream fis = new FileInputStream("C:\\Users\\matth\\Dropbox\\DAGEnerator\\testGenerator.txt");
+            FileInputStream fis = new FileInputStream("C:\\Users\\matth\\Dropbox\\DAGEnerator\\rechop_simulation.txt");
             UnicodeBOMInputStream ubis = new UnicodeBOMInputStream(fis);
             InputStreamReader isr = new InputStreamReader(ubis);
             BufferedReader br = new BufferedReader(isr);
@@ -46,7 +46,7 @@ public class DaGenerationUnitTest {
 
             node = generator.parse(br);
 
-            new DaReader().toTXT(node);
+            new DaReader().toHTML(node);
 
         } catch (IOException ex) {
             Logger.getLogger(DaGenerationUnitTest.class.getName()).log(Level.SEVERE, null, ex);
